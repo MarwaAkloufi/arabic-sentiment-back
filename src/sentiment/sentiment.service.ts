@@ -36,7 +36,8 @@ interface DailyRow {
 @Injectable()
 export class SentimentService {
   private readonly aiServiceUrl =
-    process.env.AI_SERVICE_URL ?? 'http://127.0.0.1:8000/predict';
+    process.env.AI_SERVICE_URL ??
+    'https://arabic-sentiment-ai.vercel.app/predict';
   private readonly batchConcurrency = 5;
 
   constructor(
