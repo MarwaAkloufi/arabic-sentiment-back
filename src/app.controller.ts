@@ -9,4 +9,8 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+  @Get('ping')
+  ping() {
+    return { status: 'ok', message: 'Backend is fully operational!' };
+  }
 }
