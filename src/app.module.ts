@@ -7,10 +7,35 @@ import { SentimentLog } from './sentiment/sentiment-log.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      ...typeOrmOptions(),
-      entities: [SentimentLog],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: () => {
+        const databaseUrl = process.env.DATABASE_URL;
+
+        if (databaseUrl) {
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+            extra: {
+              ssl: {
+                rejectUnauthorized: false,
+              },
+              connectionTimeoutMillis: 5000,
+            },
+            entities: [SentimentLog],
+            synchronize: true, // يفضل إيقافها في Production لاحقاً
+          };
+        }
+
+        return {
+          type: 'better-sqlite3',
+          database: process.env.SQLITE_PATH ?? 'database.sqlite',
+          entities: [SentimentLog],
+          synchronize: true,
+        };
+      },
     }),
     SentimentModule,
   ],
@@ -18,22 +43,3 @@ import { SentimentLog } from './sentiment/sentiment-log.entity';
   providers: [AppService],
 })
 export class AppModule {}
-
-function typeOrmOptions() {
-  const databaseUrl = process.env.DATABASE_URL;
-
-  if (databaseUrl) {
-    return {
-      type: 'postgres' as const,
-      url: databaseUrl,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    };
-  }
-
-  return {
-    type: 'better-sqlite3' as const,
-    database: process.env.SQLITE_PATH ?? 'database.sqlite',
-  };
-}
