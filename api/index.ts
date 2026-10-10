@@ -1,5 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
+import {
+  ExpressAdapter,
+  NestExpressApplication,
+} from '@nestjs/platform-express';
 import type { Request, Response } from 'express';
 import express from 'express';
 import { AppModule } from '../src/app.module';
