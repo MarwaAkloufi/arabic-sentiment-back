@@ -6,6 +6,8 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  Param,
+  Delete,
   Post,
   Query,
   UploadedFile,
@@ -107,5 +109,17 @@ export class SentimentController {
       label,
       search,
     );
+  }
+
+  @Delete('logs/:id')
+  async deleteLog(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ deleted: boolean }> {
+    return await this.sentimentService.deleteLog(id);
+  }
+
+  @Delete('logs')
+  async deleteAllLogs(): Promise<{ deleted: number }> {
+    return await this.sentimentService.deleteAllLogs();
   }
 }

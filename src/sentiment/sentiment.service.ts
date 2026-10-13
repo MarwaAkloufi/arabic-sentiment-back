@@ -289,6 +289,18 @@ export class SentimentService {
       take: limit,
     });
 
+    ///////////////////////////
     return { data, total, page, limit };
+  }
+
+  async deleteLog(id: number): Promise<{ deleted: boolean }> {
+    const result = await this.sentimentRepository.delete(id);
+    return { deleted: (result.affected ?? 0) > 0 };
+  }
+
+  async deleteAllLogs(): Promise<{ deleted: number }> {
+    const total = await this.sentimentRepository.count();
+    await this.sentimentRepository.clear();
+    return { deleted: total };
   }
 }
