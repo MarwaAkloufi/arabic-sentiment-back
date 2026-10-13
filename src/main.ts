@@ -11,7 +11,6 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   });
 
-  // تشغيل السيرفر على البورت عند التطوير المحلي أو إذا توفر البورت
   if (process.env.NODE_ENV !== 'production' || process.env.PORT) {
     await app.listen(process.env.PORT ?? 3000);
   } else {
